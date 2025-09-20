@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitalCircle</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #89f7fe, #66a6ff);
+            color: #333;
+            min-height: 100vh;
+            padding-bottom: 30px;
+        }
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            padding: 15px 30px;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        header .logo {
+            font-size: 22px;
+            font-weight: 700;
+            color: #66a6ff;
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+        nav ul li {
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        nav ul li:hover, nav ul li.active {
+            background: #66a6ff;
+            color: #fff;
+        }
+        /* Hero Section */
+        .hero {
+            background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?fit=crop&w=1350&q=80') no-repeat center center/cover;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            margin: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            position: relative;
+            color: #fff;
+            text-align: center;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top:0; left:0; right:0; bottom:0;
+            background: rgba(0,0,0,0.4);
+            border-radius: 20px;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+        }
+        .hero h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+        .hero-nudge {
+            font-size: 20px;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+        /* Buttons */
+        button {
+            padding: 10px 20px;
+            background: #66a6ff;
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #4d88e8;
+        }
+        /* Main Grid Layout */
+        main {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        /* Cards */
+        .card {
+            background: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .stability-score {
+            font-size: 36px;
+            font-weight: 700;
+            color: #4caf50;
+        }
+        .prediction {
+            font-weight: bold;
+        }
+        canvas {
+            width: 100% !important;
+            max-height: 200px;
+        }
+        /* Community */
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        .community {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        .post {
+            background: #f1f5f9;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        input#newPost {
+            width: 100%;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        /* Tab Buttons */
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .tab-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            background: #e0f0ff;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .tab-btn.active, .tab-btn:hover {
+            background: #66a6ff;
+            color: #fff;
+        }
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        .input-cell {
+            width: 80px;
+            padding: 5px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        /* Past Entries Table */
+        .past-table {
+            margin-top: 15px;
+        }
+        .past-table th {
+            background: #66a6ff;
+            color: #fff;
+        }
+        .past-table tr:nth-child(even) {
+            background: #f1f5f9;
+        }
+        .past-table td {
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">VitalCircle</div>
+        <nav>
+            <ul>
+                <li class="nav-link active" onclick="showScreen('dashboard')">Dashboard</li>
+                <li class="nav-link" onclick="showScreen('entries')">Entries</li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Dashboard Screen -->
+    <main id="dashboardScreen">
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Welcome Back!</h1>
+                <p class="hero-nudge" id="heroNudge">Stress looks high → Try 5 min breathing exercise 🌱</p>
+                <button onclick="newHeroNudge()">Get Another Tip</button>
+            </div>
+        </section>
+
+        <section class="dashboard-grid">
+            <!-- Stability Score -->
+            <div class="card">
+                <h2>Stability Score</h2>
+                <p class="stability-score" id="score">--%</p>
+                <p>AI predicts: <strong class="prediction" id="prediction">...</strong></p>
+            </div>
+
+            <!-- Progress Tracker -->
+            <div class="card chart-card">
+                <h2>Progress Tracker</h2>
+                <canvas id="progressChart"></canvas>
+            </div>
+
+            <!-- Clinician Connect -->
+            <div class="card full-width">
+                <h2>Clinician Connect</h2>
+                <p>Need to talk to a professional? Start a secure chat session.</p>
+                <button onclick="startChat()">Start Chat with Clinician</button>
+            </div>
+
+            <!-- Community -->
+            <div class="card full-width">
+                <h2>Community Support</h2>
+                <div class="community" id="communityPosts">
+                    <div class="post">“I tried meditation and my stress reduced a lot!”</div>
+                    <div class="post">“Walking daily has helped my BP stay normal.”</div>
+                </div>
+                <input type="text" id="newPost" placeholder="Share your tip..." >
+                <button onclick="addPost()">Post</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Entries Screen -->
+    <main id="entriesScreen" style="display:none;">
+        <section class="card full-width">
+            <h2>Daily Health Entries</h2>
+
+            <!-- Tab Buttons -->
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="openTab('diabetesEntries', event)">Diabetes</button>
+                <button class="tab-btn" onclick="openTab('bpEntries', event)">Blood Pressure</button>
+            </div>
+
+            <!-- Diabetes Table -->
+            <div id="diabetesEntries" class="tab-content">
+                <h3>Enter Today's Data</h3>
+                <table class="input-table">
+                    <thead>
+                        <tr><th>Checkup</th><th>Morning</th><th>Afternoon</th><th>Night</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Blood Glucose (mg/dL)</td>
+                            <td><input type="number" id="morning_glucose" class="input-cell"></td>
+                            <td><input type="number" id="afternoon_glucose" class="input-cell"></td>
+                            <td><input type="number" id="night_glucose" class="input-cell"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button onclick="submitEntry('diabetes')">Submit</button>
+                <h4>Past Entries</h4>
+                <table class="past-table" id="diabetesPast"></table>
+            </div>
+
+            <!-- BP Table -->
+            <div id="bpEntries" class="tab-content" style="display:none;">
+                <h3>Enter Today's Data</h3>
+                <table class="input-table">
+                     <thead>
+                        <tr><th>Checkup</th><th>Morning</th><th>Afternoon</th><th>Night</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Systolic (mmHg)</td>
+                            <td><input type="number" id="morning_systolic" class="input-cell"></td>
+                            <td><input type="number" id="afternoon_systolic" class="input-cell"></td>
+                            <td><input type="number" id="night_systolic" class="input-cell"></td>
+                        </tr>
+                        <tr>
+                            <td>Diastolic (mmHg)</td>
+                            <td><input type="number" id="morning_diastolic" class="input-cell"></td>
+                            <td><input type="number" id="afternoon_diastolic" class="input-cell"></td>
+                            <td><input type="number" id="night_diastolic" class="input-cell"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button onclick="submitEntry('bp')">Submit</button>
+                <h4>Past Entries</h4>
+                <table class="past-table" id="bpPast"></table>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const API_URL = 'http://127.0.0.1:5000/api';
+        let progressChart = null; // To hold the chart instance
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeChart();
+            fetchDashboardData();
+            fetchPastEntries();
+        });
+
+        // --- API CALLS ---
+        async function fetchDashboardData() {
+            try {
+                const response = await fetch(`${API_URL}/dashboard-stats`);
+                if (!response.ok) throw new Error('Network response was not ok');
+                const stats = await response.json();
+                
+                document.getElementById('score').textContent = `${stats.stability_score}%`;
+                document.getElementById('prediction').textContent = stats.prediction;
+                
+                updateChart(stats.chart_data.labels, stats.chart_data.data);
+
+            } catch (error) {
+                console.error('Failed to fetch dashboard stats:', error);
+            }
+        }
+        
+        async function fetchPastEntries() {
+            try {
+                const response = await fetch(`${API_URL}/entries`);
+                if (!response.ok) throw new Error('Network response was not ok');
+                const entries = await response.json();
+                
+                renderPastEntries(entries);
+
+            } catch (error) {
+                console.error('Failed to fetch past entries:', error);
+            }
+        }
+
+        async function submitEntry(type) {
+            let entryData = {};
+            if (type === 'diabetes') {
+                entryData = {
+                    morning_glucose: document.getElementById('morning_glucose').value || '0',
+                    afternoon_glucose: document.getElementById('afternoon_glucose').value || '0',
+                    night_glucose: document.getElementById('night_glucose').value || '0',
+                };
+            } else if (type === 'bp') {
+                entryData = {
+                    morning_systolic: document.getElementById('morning_systolic').value || '0',
+                    afternoon_systolic: document.getElementById('afternoon_systolic').value || '0',
+                    night_systolic: document.getElementById('night_systolic').value || '0',
+                    morning_diastolic: document.getElementById('morning_diastolic').value || '0',
+                    afternoon_diastolic: document.getElementById('afternoon_diastolic').value || '0',
+                    night_diastolic: document.getElementById('night_diastolic').value || '0',
+                };
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/entries`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ entry_type: type, data: entryData })
+                });
+
+                if (!response.ok) throw new Error('Failed to submit entry');
+                
+                // Refresh data on screen after successful submission
+                fetchDashboardData();
+                fetchPastEntries();
+                alert('Entry submitted successfully!');
+                
+                // Clear inputs
+                const tableId = type === 'diabetes' ? 'diabetesEntries' : 'bpEntries';
+                document.getElementById(tableId).querySelectorAll('.input-cell').forEach(input => input.value = '');
+
+            } catch (error) {
+                console.error('Error submitting entry:', error);
+                alert('Could not submit entry. Please try again.');
+            }
+        }
+        
+        // --- UI RENDERING ---
+        function renderPastEntries(entries) {
+            const bpTable = document.getElementById('bpPast');
+            const diabetesTable = document.getElementById('diabetesPast');
+
+            // Clear existing tables
+            bpTable.innerHTML = `<thead><tr><th>Date</th><th>Systolic (M/A/N)</th><th>Diastolic (M/A/N)</th></tr></thead><tbody></tbody>`;
+            diabetesTable.innerHTML = `<thead><tr><th>Date</th><th>Glucose (M/A/N)</th></tr></thead><tbody></tbody>`;
+
+            const bpBody = bpTable.querySelector('tbody');
+            const diabetesBody = diabetesTable.querySelector('tbody');
+
+            entries.forEach(entry => {
+                const row = document.createElement('tr');
+                const date = new Date(entry.timestamp + 'Z').toLocaleDateString();
+
+                if (entry.entry_type === 'bp') {
+                    row.innerHTML = `
+                        <td>${date}</td>
+                        <td>${entry.data.morning_systolic}/${entry.data.afternoon_systolic}/${entry.data.night_systolic}</td>
+                        <td>${entry.data.morning_diastolic}/${entry.data.afternoon_diastolic}/${entry.data.night_diastolic}</td>
+                    `;
+                    bpBody.appendChild(row);
+                } else if (entry.entry_type === 'diabetes') {
+                    row.innerHTML = `
+                        <td>${date}</td>
+                        <td>${entry.data.morning_glucose}/${entry.data.afternoon_glucose}/${entry.data.night_glucose}</td>
+                    `;
+                    diabetesBody.appendChild(row);
+                }
+            });
+        }
+
+        // --- CHART LOGIC ---
+        function initializeChart() {
+            const ctx = document.getElementById('progressChart').getContext('2d');
+            progressChart = new Chart(ctx, {
+              type: 'line',
+              data: {
+                labels: [], // Initially empty
+                datasets: [{
+                  label: 'Health Stability',
+                  data: [], // Initially empty
+                  borderColor: '#66a6ff',
+                  backgroundColor: 'rgba(102,166,255,0.2)',
+                  fill: true,
+                  tension: 0.3
+                }]
+              },
+              options: {
+                responsive: true,
+                plugins: { legend: { display: false } }
+              }
+            });
+        }
+
+        function updateChart(labels, data) {
+            if (!progressChart) return;
+            progressChart.data.labels = labels;
+            progressChart.data.datasets[0].data = data;
+            progressChart.update();
+        }
+
+        // --- OTHER UI FUNCTIONS ---
+        const heroNudges = [
+          "Take a deep breath and feel the calm 🌿",
+          "Small steps every day lead to big health improvements 💪",
+          "Remember to hydrate and nourish your body 💧",
+        ];
+
+        function newHeroNudge() {
+          const random = Math.floor(Math.random() * heroNudges.length);
+          document.getElementById("heroNudge").innerText = heroNudges[random];
+        }
+
+        function showScreen(screen) {
+          document.getElementById('dashboardScreen').style.display = screen === 'dashboard' ? 'block' : 'none';
+          document.getElementById('entriesScreen').style.display = screen === 'entries' ? 'block' : 'none';
+
+          document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
+          if(screen === 'dashboard') document.querySelector('.nav-link:nth-child(1)').classList.add('active');
+          else document.querySelector('.nav-link:nth-child(2)').classList.add('active');
+        }
+
+        function openTab(tabName, evt) {
+          document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+          document.getElementById(tabName).style.display = 'block';
+
+          document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+          if(evt) evt.currentTarget.classList.add('active');
+        }
+        
+        function addPost() {
+          const input = document.getElementById("newPost");
+          if(input.value.trim() !== "") {
+            const post = document.createElement("div");
+            post.classList.add("post");
+            post.innerText = input.value;
+            document.getElementById("communityPosts").prepend(post);
+            input.value = "";
+          }
+        }
+        
+        function startChat() {
+            // Redirects to the chat page
+            window.location.href = 'chat.html';
+        }
+    </script>
+</body>
+</html>
+
