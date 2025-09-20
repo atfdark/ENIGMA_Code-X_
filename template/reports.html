@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitalCircle - Reports</title>
+    <link rel="stylesheet" href="doc-dash.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-heartbeat logo-icon"></i>
+            <h2 class="logo-text">VitalCircle</h2>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="doc-dash.html"><i class="fas fa-th-large nav-icon"></i> <span class="nav-text">Dashboard</span></a>
+            </li>
+            <li class="nav-item">
+                <a href="patients.html"><i class="fas fa-users nav-icon"></i> <span class="nav-text">Patients</span></a>
+            </li>
+            <li class="nav-item">
+                <a href="appoinment.html"><i class="fas fa-calendar-alt nav-icon"></i> <span class="nav-text">Appointments</span></a>
+            </li>
+            <li class="nav-item">
+                <a href="reports.html" class="active"><i class="fas fa-file-medical-alt nav-icon"></i> <span class="nav-text">Reports</span></a>
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <ul class="nav-menu">
+                  <li class="nav-item">
+                      <a href="#"><i class="fas fa-cog nav-icon"></i> <span class="nav-text">Settings</span></a>
+                  </li>
+                  <li class="nav-item">
+                      <a href="#"><i class="fas fa-sign-out-alt nav-icon"></i> <span class="nav-text">Logout</span></a>
+                  </li>
+            </ul>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <div class="menu-toggle" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <h1>Patient Reports</h1>
+            <div class="header-actions">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="reportSearch" placeholder="Search Reports...">
+                </div>
+                <button class="icon-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                <div class="user-profile">
+                    <img src="https://placehold.co/100x100/E6F0FA/1A4F8B?text=DC" alt="Dr. Chen" class="user-avatar">
+                    <div class="user-info">
+                        <h4>Dr. Evelyn Chen</h4>
+                        <p>Cardiologist</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="reports-panel">
+            <div class="panel-header">
+                <h2>All Reports</h2>
+                <div class="filters-container">
+                    <select id="filterByType">
+                        <option value="">All Types</option>
+                        <option value="lab">Lab Result</option>
+                        <option value="imaging">Imaging</option>
+                        <option value="summary">Visit Summary</option>
+                    </select>
+                     <button class="btn-add-patient"><i class="fas fa-upload"></i> Upload Report</button>
+                </div>
+            </div>
+
+            <div class="report-list" id="reportList">
+                <div class="report-item" data-type="lab">
+                    <div class="report-icon lab"><i class="fas fa-vial"></i></div>
+                    <div class="report-details">
+                        <h4>Lipid Panel Results</h4>
+                        <p class="report-patient-name">Patient: <strong>Priya Sharma</strong></p>
+                    </div>
+                    <div class="report-meta">
+                        <span class="report-date">Generated: 2025-09-19</span>
+                        <span class="report-status status-reviewed">Reviewed</span>
+                    </div>
+                    <div class="report-actions">
+                        <button class="action-btn" title="View Report"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn" title="Download PDF"><i class="fas fa-download"></i></button>
+                    </div>
+                </div>
+
+                <div class="report-item" data-type="summary">
+                    <div class="report-icon summary"><i class="fas fa-notes-medical"></i></div>
+                    <div class="report-details">
+                        <h4>Post-Angioplasty Follow-up Summary</h4>
+                         <p class="report-patient-name">Patient: <strong>Priya Sharma</strong></p>
+                    </div>
+                    <div class="report-meta">
+                        <span class="report-date">Generated: 2025-09-15</span>
+                        <span class="report-status status-reviewed">Reviewed</span>
+                    </div>
+                    <div class="report-actions">
+                         <button class="action-btn" title="View Report"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn" title="Download PDF"><i class="fas fa-download"></i></button>
+                    </div>
+                </div>
+
+                <div class="report-item" data-type="imaging">
+                    <div class="report-icon imaging"><i class="fas fa-x-ray"></i></div>
+                    <div class="report-details">
+                        <h4>Chest X-Ray Results</h4>
+                         <p class="report-patient-name">Patient: <strong>Anand Rao</strong></p>
+                    </div>
+                    <div class="report-meta">
+                        <span class="report-date">Generated: 2025-09-12</span>
+                         <span class="report-status status-pending-review">Pending Review</span>
+                    </div>
+                    <div class="report-actions">
+                         <button class="action-btn" title="View Report"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn" title="Download PDF"><i class="fas fa-download"></i></button>
+                    </div>
+                </div>
+                 <div class="report-item" data-type="lab">
+                    <div class="report-icon lab"><i class="fas fa-vial"></i></div>
+                    <div class="report-details">
+                        <h4>Complete Blood Count (CBC)</h4>
+                        <p class="report-patient-name">Patient: <strong>Sunita Mehta</strong></p>
+                    </div>
+                    <div class="report-meta">
+                        <span class="report-date">Generated: 2025-09-10</span>
+                        <span class="report-status status-reviewed">Reviewed</span>
+                    </div>
+                    <div class="report-actions">
+                        <button class="action-btn" title="View Report"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn" title="Download PDF"><i class="fas fa-download"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="doc-dash.js"></script>
+</body>
+</html>
