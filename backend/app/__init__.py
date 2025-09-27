@@ -1,11 +1,8 @@
 import sys
 import os
 
-# --- NEW CODE TO FIX THE IMPORT ERROR ---
 # This forces Python to look for files in your 'backend' folder.
-# It makes the import system more robust, regardless of how you run the script.
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-# --- END OF NEW CODE ---
 
 from flask import Flask
 from flask_socketio import SocketIO
@@ -23,6 +20,8 @@ def create_app(config_class=Config):
     """
     Creates and configures the Flask application.
     """
+    # --- THIS IS THE FIX ---
+    # We explicitly tell Flask where to find the static and template folders.
     app = Flask(__name__,
                 static_folder='../static',
                 template_folder='../templates')

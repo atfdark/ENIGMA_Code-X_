@@ -1,7 +1,7 @@
-from flask import render_template, Blueprint
+from flask import Blueprint, render_template
 
-# This creates a new "blueprint" for your main pages.
-# Think of it as a way to organize your page URLs.
+# --- THIS IS THE FIX ---
+# We define the blueprint here, making this file self-contained.
 main_bp = Blueprint('main', __name__)
 
 # --- Public Pages ---
@@ -13,7 +13,7 @@ def landing_page():
 
 @main_bp.route('/selection')
 def selection_page():
-    return render_template('selection.html')
+    return render_template('role_sel.html')
 
 # --- Authentication Pages ---
 
@@ -23,17 +23,17 @@ def doc_login_page():
 
 @main_bp.route('/patient/login')
 def patient_login_page():
-    return render_template('patient_login.html')
+    return render_template('pateint.html')
 
 # --- Doctor-Protected Pages ---
 
 @main_bp.route('/doctor/dashboard')
 def dashboard():
-    return render_template('doc-dash.html')
+    return render_template('doc_dash.html')
 
 @main_bp.route('/doctor/patients')
 def patients():
-    return render_template('patients.html')
+    return render_template('pat_page.html')
 
 @main_bp.route('/doctor/appointments')
 def appointments():
@@ -43,10 +43,15 @@ def appointments():
 def reports():
     return render_template('reports.html')
 
-# --- Patient-Protected Page (Placeholder) ---
+# --- Patient-Protected Page ---
 
 @main_bp.route('/patient/dashboard')
 def patient_dashboard():
-    # This will eventually be the patient dashboard
     return render_template('pat_dash.html')
+
+@main_bp.route('/patient/entries')
+def patient_entries():
+    return render_template('entries.html')
+
+
 
