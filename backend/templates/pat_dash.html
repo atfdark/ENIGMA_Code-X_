@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VitalCircle</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pat_dash1.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">VitalCircle</div>
+    <nav>
+      <ul>
+        <li class="nav-link active" onclick="showScreen('dashboard')">Dashboard</li>
+        <li class="nav-link" onclick="showScreen('entries')">Entries</li>
+        <li class="nav-link" onclick="showScreen('reports')">Reports</li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Dashboard Screen -->
+  <main id="dashboardScreen">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Welcome Back!</h1>
+        <p class="hero-nudge" id="heroNudge">Stress looks high → Try 5 min breathing exercise 🌱</p>
+        <button onclick="newHeroNudge()">Get Another Tip</button>
+      </div>
+    </section>
+
+    <!-- Dashboard Grid -->
+    <section class="dashboard-grid">
+
+      <!-- Stability Score -->
+      <div class="card stability-card">
+        <h2>Stability Score</h2>
+        <p class="stability-score" id="score">82%</p>
+        <p id="stabilityStatus">AI predicts: <strong>Stable ✅</strong></p>
+      </div>
+
+      <!-- Progress Tracker -->
+      <div class="card chart-card">
+        <h2>Progress Tracker</h2>
+        <canvas id="progressChart"></canvas>
+      </div>
+<!-- Medication Reminder -->
+<div class="card full-width">
+  <h2>⏰ Medication Reminder</h2>
+  <p>Stay on track with your prescribed schedule. Set reminders below:</p>
+  
+  <div class="reminder-form">
+    <label for="medTime">Select Time:</label>
+    <input type="time" id="medTime">
+    
+    <label for="medName">Medication:</label>
+    <input type="text" id="medName" placeholder="e.g. Metformin">
+    
+    <button onclick="addReminder()">Add Reminder</button>
+  </div>
+
+  <h4>Upcoming Reminders</h4>
+  <ul id="reminderList" class="reminder-list">
+    <li>No reminders yet</li>
+  </ul>
+</div>
+
+      <!-- Clinician Connect -->
+      <div class="card full-width">
+        <h2>Clinician Connect</h2>
+        <button id="requestConsultBtn" onclick="requestAppointment()">Request Video Consult</button>
+        <p id="appointmentStatus" style="margin-top:10px; font-weight:600;"></p>
+      </div>
+
+      <!-- Community -->
+      <div class="card full-width">
+        <h2>Community Support</h2>
+        <div class="community" id="communityPosts">
+          <div class="post">“I tried meditation and my stress reduced a lot!”</div>
+          <div class="post">“Walking daily has helped my BP stay normal.”</div>
+        </div>
+        <input type="text" id="newPost" placeholder="Share your tip...">
+        <button onclick="addPost()">Post</button>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- Entries Screen -->
+  <main id="entriesScreen" style="display:none;">
+    <section class="card full-width">
+      <h2>Daily Health Entries</h2>
+
+      <!-- Tab Buttons -->
+      <div class="tab-buttons">
+        <button class="tab-btn active" onclick="openTab('diabetesTab', event)">Diabetes</button>
+        <button class="tab-btn" onclick="openTab('bpTab', event)">Blood Pressure</button>
+      </div>
+
+      <!-- Diabetes Tab -->
+      <div id="diabetesTab" class="tab-content">
+        <h3>Enter Today's Data</h3>
+        <label for="diabetesDate">Select Date:</label>
+        <input type="date" id="diabetesDate" class="input-cell">
+        
+        <table class="input-table" id="diabetesEntries">
+          <thead>
+            <tr>
+              <th>Checkup</th>
+              <th>Morning</th>
+              <th>Afternoon</th>
+              <th>Night</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Blood Glucose (mg/dL)</td>
+              <td><input type="number" class="input-cell"></td>
+              <td><input type="number" class="input-cell"></td>
+              <td><input type="number" class="input-cell"></td>
+            </tr>
+            <tr>
+              <td>Medication Taken?</td>
+              <td>
+                <select class="input-cell">
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </td>
+              <td>
+                <select class="input-cell">
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </td>
+              <td>
+                <select class="input-cell">
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <button onclick="submitEntry('diabetes')">Submit</button>
+        
+        <div id="diabetesRecent" class="recent-entries"></div>
+        <h4>Past Entries</h4>
+        <table id="diabetesPast" class="past-table"></table>
+      </div>
+
+      <!-- BP Tab -->
+      <div id="bpTab" class="tab-content" style="display:none;">
+        <h3>Enter Today's Data</h3>
+        <label for="bpDate">Select Date:</label>
+        <input type="date" id="bpDate" class="input-cell">
+
+        <table class="input-table" id="bpEntries">
+          <thead>
+            <tr>
+              <th>Checkup</th>
+              <th>Morning</th>
+              <th>Afternoon</th>
+              <th>Night</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Systolic (mmHg)</td>
+              <td><input type="number" class="input-cell"></td>
+              <td><input type="number" class="input-cell"></td>
+              <td><input type="number" class="input-cell"></td>
+            </tr>
+            <tr>
+              <td>Diastolic (mmHg)</td>
+              <td><input type="number" class="input-cell"></td>
+              <td><input type="number" class="input-cell"></td>
+              <td><input type="number" class="input-cell"></td>
+            </tr>
+            <tr>
+              <td>Heart Rate (bpm)</td>
+              <td><input type="number" class="input-cell"></td>
+              <td><input type="number" class="input-cell"></td>
+              <td><input type="number" class="input-cell"></td>
+            </tr>
+          </tbody>
+        </table>
+        <button onclick="submitEntry('bp')">Submit</button>
+
+        <div id="bpRecent" class="recent-entries"></div>
+        <h4>Past Entries</h4>
+        <table id="bpPast" class="past-table"></table>
+      </div>
+
+      <button onclick="clearData()">Delete All Entries</button>
+    </section>
+  </main>
+
+  <!-- Reports Screen -->
+  <main id="reportsScreen" style="display:none;">
+    <section class="card full-width">
+      <h2>📂 Shared Reports</h2>
+      <div id="reportsList">
+  <div class="report-item">
+    <div class="left">
+      <div class="title">Blood Test Report</div>
+      <div class="meta">Shared on 12 Sep 2025 · Dr. Smith</div>
+    </div>
+    <a href="#" class="download-link">View</a>
+  </div>
+
+  <div class="report-item">
+    <div class="left">
+      <div class="title">ECG Report</div>
+      <div class="meta">Shared on 08 Sep 2025 · Cardio Dept.</div>
+    </div>
+    <a href="#" class="download-link">View</a>
+  </div>
+
+  <div class="report-item">
+    <div class="left">
+      <div class="title">MRI Scan</div>
+      <div class="meta">Shared on 01 Sep 2025 · Radiology</div>
+    </div>
+    <a href="#" class="download-link">View</a>
+  </div>
+</div>
+
+    </section>
+  </main>
+  <script src="{{ url_for('static', filename='js/pat_dash.js') }}"></script>
+</body>
+</html>

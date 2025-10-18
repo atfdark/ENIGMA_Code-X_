@@ -1,0 +1,451 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #89f7fe, #66a6ff);
+    color: #333;
+    min-height: 100vh;
+    padding-bottom: 30px;
+}
+
+/* Remove number input arrows */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    padding: 15px 30px;
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+header .logo {
+    font-size: 22px;
+    font-weight: 700;
+    color: #66a6ff;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+}
+
+nav ul li {
+    cursor: pointer;
+    padding: 8px 15px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+nav ul li:hover,
+nav ul li.active {
+    background: #66a6ff;
+    color: #fff;
+}
+
+/* Hero Section */
+.hero {
+    background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?fit=crop&w=1350&q=80') no-repeat center center/cover;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    margin: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    position: relative;
+    color: #fff;
+    text-align: center;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 20px;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+}
+
+.hero h1 {
+    font-size: 36px;
+    margin-bottom: 15px;
+}
+
+.hero-nudge {
+    font-size: 20px;
+    font-style: italic;
+    margin-bottom: 15px;
+}
+
+/* Buttons */
+button {
+    padding: 10px 20px;
+    background: #66a6ff;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #4d88e8;
+}
+
+/* Dashboard Grid Layout */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    /* stability box fits content, chart fills rest */
+    gap: 20px;
+    max-width: 1200px;
+    margin: 20px auto;
+    align-items: start;
+}
+
+/* Cards */
+.card {
+    background: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+/* Stability Score Card */
+.stability-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* center content */
+    text-align: center;
+    padding: 15px 20px;
+    min-width: 120px;
+    height: auto;
+    /* fits content */
+}
+
+.stability-score {
+    font-size: 36px;
+    font-weight: 700;
+    color: #4caf50;
+    margin-bottom: 5px;
+}
+
+/* Progress Tracker */
+.chart-card {
+    min-height: 250px;
+    width: 100%;
+}
+
+/* Full-width Cards (Below stability + chart) */
+.full-width {
+    grid-column: 1 / -1;
+}
+
+/* Community Section */
+.community {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+.post {
+    background: #f1f5f9;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+input#newPost {
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+/* Tabs */
+.tab-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 8px;
+    background: #e0f0ff;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.tab-btn.active,
+.tab-btn:hover {
+    background: #66a6ff;
+    color: #fff;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+}
+
+table,
+th,
+td {
+    border: 1px solid #ccc;
+}
+
+th,
+td {
+    padding: 10px;
+    text-align: center;
+}
+
+.input-cell {
+    width: 80px;
+    padding: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+/* Recent & Past Entries */
+.recent-entries {
+    margin-top: 10px;
+    padding: 10px;
+    background: #e0f0ff;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.recent-entries div {
+    margin-bottom: 5px;
+}
+
+.past-table {
+    margin-top: 15px;
+    width: 100%;
+}
+
+.past-table th {
+    background: #66a6ff;
+    color: #fff;
+}
+
+.past-table tr:nth-child(even) {
+    background: #f1f5f9;
+}
+
+.past-table td {
+    font-weight: 500;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* ====== Reports section styling (works with your current .report-item markup) ====== */
+#reportsScreen {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 20px auto;
+}
+
+#reportsList {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* Styles for each report block */
+.report-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 14px 18px;
+    box-shadow: 0 6px 18px rgba(8, 35, 63, 0.06);
+    border-left: 6px solid rgba(102, 166, 255, 0.95);
+    transition: transform .16s ease, box-shadow .16s ease;
+    color: #1f2937;
+    font-weight: 600;
+}
+
+/* Slight lift on hover */
+.report-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(8, 35, 63, 0.10);
+}
+
+/* If the report-item text contains the date/link inline, make link distinct */
+.report-item a {
+    text-decoration: none;
+    color: #066fc7;
+    font-weight: 700;
+    border: 1px solid rgba(6, 111, 199, 0.12);
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: transparent;
+    transition: background .12s ease, color .12s ease;
+}
+
+/* Link hover */
+.report-item a:hover {
+    background: #066fc7;
+    color: #fff;
+    border-color: #066fc7;
+}
+
+/* Support for a slightly more structured item (title + meta) */
+.report-item .left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: left;
+    min-width: 0;
+    /* allow truncation */
+}
+
+.report-item .title {
+    font-size: 1rem;
+    color: #0f172a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.report-item .meta {
+    font-size: 0.86rem;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+/* small screens: stack */
+@media (max-width: 640px) {
+    .report-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .report-item a {
+        align-self: flex-end;
+    }
+}
+
+/* Medication Reminder styling */
+.reminder-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.reminder-form label {
+    font-weight: 600;
+    margin-right: 6px;
+}
+
+.reminder-form input {
+    padding: 8px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+}
+
+.reminder-form button {
+    background: #4cafef;
+    border: none;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.reminder-form button:hover {
+    background: #3a95d9;
+}
+
+.reminder-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.reminder-list li {
+    background: #f9fafb;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    border-left: 4px solid #4cafef;
+}
+
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 28px;
+    }
+
+    .hero-nudge {
+        font-size: 16px;
+    }
+
+    .input-cell {
+        width: 100%;
+    }
+}
